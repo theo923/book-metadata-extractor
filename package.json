@@ -15,7 +15,6 @@
         "cheerio": "^1.0.0-rc.10",
         "chrome-aws-lambda": "8",
         "framer-motion": "^5.0.0",
-        "https": "^1.0.0",
         "next": "latest",
         "postcss-cli": "^9.0.1",
         "puppeteer-core": "8",
