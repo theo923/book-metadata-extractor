@@ -29,10 +29,11 @@ const Panel = (props: childNode): JSX.Element => {
                     })
                     .then((data) => {
                         status = data.status;
+                        console.log(status);
                         if (Object.keys(data.data).length !== 0)
                             setResult(data.data);
                     });
-            } while (status !== 200);
+            } while (status != 200);
         }
     };
 
