@@ -84,7 +84,7 @@ const getDescription = async (url) => {
     let chrome = {};
     let puppeteer;
     console.log(process.env.AWS_LAMBDA_FUNCTION_VERSION);
-    if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+    if (process.env.NODE_ENV === "production") {
         // running on the Vercel platform.
         chrome = require("chrome-aws-lambda");
         puppeteer = require("puppeteer-core");
@@ -100,12 +100,14 @@ const getDescription = async (url) => {
                 "--hide-scrollbars",
                 "--disable-web-security",
             ],
-            defaultViewport: chrome.defaultViewport,
+            args: chrome.args,
             executablePath: await chrome.executablePath,
-            headless: true,
-            ignoreHTTPSErrors: true,
+            headless: chrome.headless,
         });
         const page = await browser.newPage();
+        page.setUserAgent(
+            "Opera/9.80 (J2ME/MIDP; Opera Mini/5.1.21214/28.2725; U; ru) Presto/2.8.119 Version/11.10"
+        );
         await page.goto(url);
         const iframeParagraph = await page.evaluate(() => {
             const iframe = document.getElementById("bookDesc_iframe");

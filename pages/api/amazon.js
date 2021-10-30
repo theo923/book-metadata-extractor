@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-const { amazonRequest } = require("../scripts/amazon");
+const { amazonRequest } = require("../../scripts/amazon");
 
 export default async function amazonAPI(req, res) {
     const { url } = req.body;
