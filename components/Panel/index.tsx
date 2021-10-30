@@ -21,14 +21,18 @@ const Panel = (props: childNode): JSX.Element => {
 
     const handleExtract = async (): Promise<any> => {
         if (url.includes("amazon")) {
-            await axios
-                .post("/api/amazon", {
-                    url,
-                })
-                .then(({data}) => {
-                    if (Object.keys(data).length !== 0)
-                        setResult(data);
-                });
+            let status;
+            do {
+                await axios
+                    .post("/api/amazon", {
+                        url,
+                    })
+                    .then((data) => {
+                        status = data.status;
+                        if (Object.keys(data.data).length !== 0)
+                            setResult(data.data);
+                    });
+            } while (status !== 200);
         }
     };
 
