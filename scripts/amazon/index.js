@@ -83,7 +83,7 @@ export const amazonRequest = async (url) => {
 const getDescription = async (url) => {
     let chrome = {};
     let puppeteer;
-
+    console.log(process.env.AWS_LAMBDA_FUNCTION_VERSION);
     if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
         // running on the Vercel platform.
         chrome = require("chrome-aws-lambda");
