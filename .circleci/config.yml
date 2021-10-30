@@ -9,16 +9,16 @@ jobs:
     steps:
       - checkout
       - run: echo "build project"
-      - run: npm install
-      - run: npm run build
+      - run: yarn 
+      - run: yarn build
   test:
     docker:
       - image: cimg/node:16.4.0
     steps:
       - checkout
       - run: echo "Running tests"
-      - run: npm install
-      - run: npm test
+      - run: yarn install
+      - run: yarn test
 
 
 # Orchestrate our job run sequence
