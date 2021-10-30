@@ -1,6 +1,7 @@
-// const https = require("https");
+const https = require("https");
 const axios = require("axios");
 const cheerio = require("cheerio");
+const puppeteer = require("puppeteer");
 
 export const amazonRequest = async (url) => {
     let book_info = {};
@@ -81,43 +82,17 @@ export const amazonRequest = async (url) => {
 };
 
 const getDescription = async (url) => {
-    let chrome = {};
-    let puppeteer;
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url);
+    const iframeParagraph = await page.evaluate(() => {
+        const iframe = document.getElementById("bookDesc_iframe");
+        const iframeDoc =
+            iframe.contentDocument || iframe.contentWindow.document;
+        const iframeP = iframeDoc.getElementById("iframeContent");
+        return iframeP.innerHTML;
+    });
+    await browser.close();
 
-    if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-        // running on the Vercel platform.
-        chrome = require("chrome-aws-lambda");
-        puppeteer = require("puppeteer-core");
-    } else {
-        // running locally.
-        puppeteer = require("puppeteer");
-    }
-
-    try {
-        let browser = await puppeteer.launch({
-            args: [
-                ...chrome.args,
-                "--hide-scrollbars",
-                "--disable-web-security",
-            ],
-            defaultViewport: chrome.defaultViewport,
-            executablePath: await chrome.executablePath,
-            headless: true,
-            ignoreHTTPSErrors: true,
-        });
-        const page = await browser.newPage();
-        await page.goto(url);
-        const iframeParagraph = await page.evaluate(() => {
-            const iframe = document.getElementById("bookDesc_iframe");
-            const iframeDoc =
-                iframe.contentDocument || iframe.contentWindow.document;
-            const iframeP = iframeDoc.getElementById("iframeContent");
-            return iframeP.innerHTML;
-        });
-        await browser.close();
-        return iframeParagraph;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
+    return iframeParagraph;
 };
