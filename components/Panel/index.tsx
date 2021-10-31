@@ -20,11 +20,10 @@ import { FiRefreshCw } from "react-icons/fi";
 import { GrClear } from "react-icons/gr";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
-import { NextRouter } from "next/dist/client/router";
 
 const StyledPanel: StyledComponent<"div", any, {}, never> = styled.div`
     ${flex}
-    ${tw`border-2 rounded-md border-blue-500 p-2`}
+    ${tw` rounded-md  p-2`}
 `;
 
 const Panel = (props: childNode): JSX.Element => {

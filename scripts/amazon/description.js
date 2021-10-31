@@ -2,7 +2,7 @@ export const amazonDescriptionRequest = async (url) => {
     try {
         let description;
         let attempt = 0;
-        while (description == null || !description || attempt >= 3) {
+        while ((description == null || !description) && attempt <= 3) {
             console.log("Getting Description");
             description = await getDescription(url);
             attempt++;

@@ -11,6 +11,7 @@ import { books } from "../../interface/default_value";
 import { booksProps } from "../../interface/interface";
 import axios, { AxiosResponse } from "axios";
 import Button from "../../styled/Button";
+import { FiSearch } from "react-icons/fi";
 
 interface FormProps {
     result?: booksProps;
@@ -21,7 +22,7 @@ interface FormProps {
 const StyledForm: StyledComponent<"div", any, { width }, never> = styled.div`
     width: 49%;
     justify-content: flex-start;
-    ${tw`border-2 rounded-md border-blue-500 p-2`}
+    ${tw`rounded-md p-2`}
     ${any}
 `;
 
@@ -75,21 +76,29 @@ const Form = (props: FormProps): JSX.Element => {
                         <Text fontSize={["20px", null, null, "30px"]}>
                             {`${key} :`}
                         </Text>
-                        <Box>
-                            <Input
-                                name={key}
-                                width={["150px", "150px", "150px", "200px"]}
-                                type="text"
-                                value={
-                                    key === "description"
-                                        ? description
-                                        : info[key]
-                                }
-                                onChange={handleChange}
-                            />
+                        <Box flex justifyContent="flex-start">
+                            {key === "description" ? (
+                                <Input
+                                    name={key}
+                                    width={["150px", "150px", "150px", "200px"]}
+                                    type="text"
+                                    value={description}
+                                    onChange={(e) =>
+                                        setDescription(e.target.value)
+                                    }
+                                />
+                            ) : (
+                                <Input
+                                    name={key}
+                                    width={["150px", "150px", "150px", "200px"]}
+                                    type="text"
+                                    value={info[key]}
+                                    onChange={handleChange}
+                                />
+                            )}
                             {key === "description" && (
                                 <Button onClick={() => handleDescription()}>
-                                    get
+                                    <FiSearch size="25px" />
                                 </Button>
                             )}
                         </Box>
