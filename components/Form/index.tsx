@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
-import { childNode } from "../../interface/interface";
+import React from "react";
 import styled, { StyledComponent } from "styled-components";
 import tw from "twin.macro";
-import { flex } from "../../styled";
 import Box from "../../styled/Box";
 import Input from "../../styled/Input";
 import Text from "../../styled/Text";
-import Button from "../../styled/Button";
 import { any } from "../../styled/styled-system";
 import { useForm } from "../../utils/useForm";
 import { getLabel } from "../../utils/getLabel";
+import { createStar } from "../../utils/createStar";
 
 interface FormProps {
     result?: any;
@@ -36,9 +34,13 @@ const Form = (props: FormProps): JSX.Element => {
                             <Text fontSize={["15px", null, null, "20px"]}>
                                 {`${getLabel(key, props.locale)} :`}
                             </Text>
-                            <Text fontSize={["15px", null, null, "20px"]}>
-                                {`${info[key]} `}
-                            </Text>
+                            {key !== "stars" ? (
+                                <Text fontSize={["15px", null, null, "20px"]}>
+                                    {info[key]}
+                                </Text>
+                            ) : (
+                                createStar(info[key])
+                            )}
                         </Box>
                     ))}
                 </Box>
