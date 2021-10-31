@@ -73,7 +73,7 @@ export const amazonRequest = async (url) => {
         let description;
         do {
             description = await getDescription(url);
-        } while (description == null && !description);
+        } while (description == null || !description);
         book_info["description"] = description;
 
         return book_info;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { booksProps, childNode } from "../../interface/interface";
 import styled, { StyledComponent } from "styled-components";
 import tw from "twin.macro";
@@ -20,8 +20,14 @@ const isBook = (x: any): x is booksProps => x !== undefined;
 const Panel = (props: childNode): JSX.Element => {
     const [url, setUrl] = useState<string>("");
     const [locale, setLocale] = useState<string>("");
-    const [result, setResult] = useState({});
+    const [result, setResult] = useState<booksProps | boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
+    const [loaded, setLoaded] = useState<boolean>();
+    const [error, setError] = useState<string>("");
+
+    useEffect(() => {
+        if (!result && loaded) setError("error, please try again!");
+    }, [loading]);
 
     const handleExtract = async (): Promise<any> => {
         setLoading(true);
@@ -33,9 +39,14 @@ const Panel = (props: childNode): JSX.Element => {
                     url,
                 })
                 .then((data: AxiosResponse<booksProps>) => {
-                    if (data.status === 200) setResult(data.data);
+                    console.log(data);
+                    if (data.status === 200) {
+                        setError("");
+                        setResult(data.data);
+                    }
                 });
             setLoading(false);
+            setLoaded(true);
         }
     };
 
@@ -50,14 +61,26 @@ const Panel = (props: childNode): JSX.Element => {
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder="Please insert an url from amazon"
                     ></Input>
-                    {!loading && (
+                    {!result && !loading && (
                         <Button onClick={() => handleExtract()}>Submit</Button>
+                    )}
+                    {((result && !loading) || error.length > 0) && (
+                        <Button
+                            onClick={() => {
+                                setLoaded(false);
+                                setResult(false);
+                                handleExtract();
+                            }}
+                        >
+                            Refresh
+                        </Button>
                     )}
                 </Box>
             </StyledPanel>
-            {Object.keys(result).length !== 0 && (
-                <Form result={result} locale={locale} />
+            {error.length > 0 && (
+                <Text fontSize={["20px", null, null, "30px"]}>{error}</Text>
             )}
+            {result && <Form result={result} locale={locale} />}
         </>
     );
 };
