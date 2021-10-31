@@ -33,8 +33,7 @@ const Panel = (props: childNode): JSX.Element => {
                     url,
                 })
                 .then((data: AxiosResponse<booksProps>) => {
-                    if (isBook(data.data) && data.status === 200)
-                        setResult(data.data);
+                    if (data.status === 200) setResult(data.data);
                 });
         }
     };
@@ -50,7 +49,7 @@ const Panel = (props: childNode): JSX.Element => {
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder="Please insert an url from amazon"
                     ></Input>
-                    {Object.keys(result).length === 0 && (
+                    {!loading && (
                         <Button onClick={() => handleExtract()}>Submit</Button>
                     )}
                 </Box>
