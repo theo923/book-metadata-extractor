@@ -124,7 +124,9 @@ const Panel = (props: childNode): JSX.Element => {
                     </>
                 )}
             </Box>
-            {/* {result && <Form result={ordered(result)} locale={locale} />} */}
+            {result !== false && (
+                <Form result={ordered(result)} locale={locale} />
+            )}
         </>
     );
 };

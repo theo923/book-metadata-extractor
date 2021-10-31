@@ -71,9 +71,11 @@ export const amazonRequest = async (url) => {
         book_info["authors"] = authors;
         book_info["title"] = title;
         let description;
+        let attempt = 0;
         do {
             description = await getDescription(url);
-        } while (description == null || !description);
+            attempt++;
+        } while (description == null || !description || attempt >= 3);
         book_info["description"] = description;
 
         return book_info;
@@ -85,7 +87,6 @@ export const amazonRequest = async (url) => {
 const getDescription = async (url) => {
     let chrome = {};
     let puppeteer;
-
     if (process.env.NODE_ENV === "production") {
         // running on the Vercel platform.
         chrome = require("chrome-aws-lambda");
