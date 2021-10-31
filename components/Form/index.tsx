@@ -7,7 +7,6 @@ import Text from "../../styled/Text";
 import { any } from "../../styled/styled-system";
 import { useForm } from "../../utils/useForm";
 import { getLabel } from "../../utils/getLabel";
-import { createStar } from "../../utils/createStar";
 
 interface FormProps {
     result?: any;
@@ -34,14 +33,9 @@ const Form = (props: FormProps): JSX.Element => {
                             <Text fontSize={["15px", null, null, "20px"]}>
                                 {`${getLabel(key, props.locale)} :`}
                             </Text>
-                            {key !== "stars" ? (
-                                <Text fontSize={["15px", null, null, "20px"]}>
-                                    {info[key]}
-                                </Text>
-                            ) : (
-                                // createStar(info[key])
-                                <p></p>
-                            )}
+                            <Text fontSize={["15px", null, null, "20px"]}>
+                                {info[key]}
+                            </Text>
                         </Box>
                     ))}
                 </Box>
