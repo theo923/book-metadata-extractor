@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { StyledComponent } from "styled-components";
 import tw from "twin.macro";
 import Box from "../../styled/Box";
@@ -11,7 +11,9 @@ import { books } from "../../interface/default_value";
 import { booksProps } from "../../interface/interface";
 import axios, { AxiosResponse } from "axios";
 import Button from "../../styled/Button";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiDownload, FiArrowRight } from "react-icons/fi";
+import { Hdoujin } from "../../output/hdoujin";
+import { Koromo } from "../../output/koromo";
 
 interface FormProps {
     result?: booksProps;
@@ -29,6 +31,8 @@ const StyledForm: StyledComponent<"div", any, { width }, never> = styled.div`
 const Form = (props: FormProps): JSX.Element => {
     const [info, handleChange] = useForm(props.result || books);
     const [description, setDescription] = useState<string>("");
+    const [textFormat, setTextFormat] = useState<string>("");
+    const [selector, setSelector] = useState<string>("");
 
     const handleDescription = async (): Promise<any> => {
         if (props?.url.includes("amazon")) {
@@ -43,6 +47,18 @@ const Form = (props: FormProps): JSX.Element => {
                     }
                 });
         }
+    };
+
+    const handleExport = () => {
+        const blob = new Blob([textFormat], {
+            type: "text/plain",
+        });
+        const url2 = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url2;
+        a.download = selector === "Hdou" ? "metadata.txt" : "Info.json";
+        a.click();
+        URL.revokeObjectURL(url2);
     };
 
     return (
@@ -104,6 +120,49 @@ const Form = (props: FormProps): JSX.Element => {
                         </Box>
                     </Box>
                 ))}
+                <Box flex justifyContent="flex-start" marginY="10px">
+                    <Text
+                        display="flex"
+                        alignItems="center"
+                        fontSize={["10px", null, null, "15px"]}
+                    >
+                        Select Metadata Format <FiArrowRight size="25px" />
+                    </Text>
+                    <Button
+                        onClick={() => {
+                            setSelector("Hdou");
+                            setTextFormat(
+                                Hdoujin(info, description, props.url)
+                            );
+                        }}
+                    >
+                        HDJ
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            setSelector("Koromo");
+                            setTextFormat(Koromo(info));
+                        }}
+                    >
+                        Koromo
+                    </Button>
+                    <Text
+                        display="flex"
+                        alignItems="center"
+                        fontSize={["10px", null, null, "15px"]}
+                    >
+                        Download <FiArrowRight size="25px" />
+                    </Text>
+                    <Button onClick={() => handleExport()}>
+                        <FiDownload size="25px" />
+                    </Button>
+                </Box>
+                <Text fontSize={["20px", null, null, "35px"]}>
+                    Preview
+                </Text>
+                <Text fontSize={["10px", null, null, "15px"]}>
+                    {textFormat}
+                </Text>
             </StyledForm>
         </Box>
     );
