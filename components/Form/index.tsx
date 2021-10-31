@@ -27,7 +27,8 @@ const Form = (props: FormProps): JSX.Element => {
     const [info, handleChange] = useForm(props.result || {});
 
     useEffect(() => {
-        handleChange(props.result);
+        console.log(props.result);
+        handleChange({ ...props.result });
     }, [props.result]);
 
     return (
