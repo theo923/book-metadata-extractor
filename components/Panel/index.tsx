@@ -33,7 +33,8 @@ const Panel = (props: childNode): JSX.Element => {
                     url,
                 })
                 .then((data: AxiosResponse<booksProps>) => {
-                    if (isBook(data.data)) setResult(data.data);
+                    if (isBook(data.data) && data.status === 200)
+                        setResult(data.data);
                 });
         }
     };
