@@ -26,18 +26,13 @@ const StyledForm: StyledComponent<"div", any, { width }, never> = styled.div`
 const Form = (props: FormProps): JSX.Element => {
     const [info, handleChange] = useForm(props.result || {});
 
-    useEffect(() => {
-        console.log(props.result);
-        handleChange({ ...props.result });
-    }, [props.result]);
-
     return (
         <Box flex alignItems="flex-start" marginTop="8px" flexWrap="wrap">
             <StyledForm width={["100%", null, "50%", "49%"]}>
                 <Box flex flexDirection="column">
                     <img src={info.image}></img>
                     {Object.keys(info).map((key, idx) => (
-                        <Box flex flexWrap="wrap">
+                        <Box flex flexWrap="wrap" key={idx}>
                             <Text fontSize={["15px", null, null, "20px"]}>
                                 {`${key} :`}
                             </Text>
