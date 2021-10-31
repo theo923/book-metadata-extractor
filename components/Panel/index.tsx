@@ -22,7 +22,7 @@ const Panel = (props: childNode): JSX.Element => {
     const [locale, setLocale] = useState<string>("");
     const [result, setResult] = useState({});
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
 
     const handleExtract = async (): Promise<any> => {
         setLoading(true);
@@ -36,9 +36,9 @@ const Panel = (props: childNode): JSX.Element => {
                 .then((data: AxiosResponse<booksProps>) => {
                     console.log(data);
                     if (data.status === 200) {
-                        setError(false);
+                        setError("");
                         setResult(data.data);
-                    } else setError(true);
+                    } else setError("error, please try again!");
                 });
             setLoading(false);
         }
