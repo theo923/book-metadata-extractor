@@ -58,6 +58,7 @@ const Panel = (props: childNode): JSX.Element => {
             await axios
                 .post("/api/amazon", {
                     url,
+                    method: "normal",
                 })
                 .then((data: AxiosResponse<booksProps>) => {
                     if (data.status === 200) {
@@ -130,7 +131,7 @@ const Panel = (props: childNode): JSX.Element => {
                 )}
             </Box>
             {result !== false && (
-                <Form result={ordered(result)} locale={locale} />
+                <Form result={ordered(result)} locale={locale} url={url} />
             )}
         </>
     );
