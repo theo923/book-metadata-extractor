@@ -72,11 +72,11 @@ export const amazonRequest = async (url) => {
         book_info["title"] = title;
         let description;
         let attempt = 0;
-        do {
+        while (description == null || !description || attempt >= 3) {
             description = await getDescription(url);
             attempt++;
-        } while (description == null || !description || attempt >= 3);
-        book_info["description"] = "";
+        }
+        book_info["description"] = description;
 
         return book_info;
     } catch (e) {

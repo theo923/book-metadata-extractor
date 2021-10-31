@@ -8,9 +8,10 @@ import { any } from "../../styled/styled-system";
 import { useForm } from "../../utils/useForm";
 import { getLabel } from "../../utils/getLabel";
 import { books } from "../../interface/default_value";
+import { booksProps } from "../../interface/interface";
 
 interface FormProps {
-    result?: any;
+    result?: booksProps;
     locale?: string;
 }
 
@@ -22,13 +23,19 @@ const StyledForm: StyledComponent<"div", any, { width }, never> = styled.div`
 `;
 
 const Form = (props: FormProps): JSX.Element => {
-    const [info, handleChange] = useForm(props.result);
+    const [info, handleChange] = useForm(props.result || books);
 
     return (
-        <Box flex alignItems="flex-start" marginTop="8px" flexWrap="wrap">
+        <Box
+            data-test="component-form"
+            flex
+            alignItems="flex-start"
+            marginTop="8px"
+            flexWrap="wrap"
+        >
             <StyledForm width={["100%", null, "50%", "49%"]}>
                 <Box flex flexDirection="column">
-                    <img src={info.image}></img>
+                    <img src={info?.image}></img>
                     {Object.keys(info).map((key, idx) => (
                         <Box flex flexWrap="wrap" key={idx}>
                             <Text fontSize={["15px", null, null, "20px"]}>
