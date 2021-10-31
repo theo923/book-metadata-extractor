@@ -26,7 +26,7 @@ const Form = (props: FormProps): JSX.Element => {
 
     return (
         <Box flex alignItems="flex-start" marginTop="8px" flexWrap="wrap">
-            {/* <StyledForm width={["100%", null, "50%", "49%"]}>
+            <StyledForm width={["100%", null, "50%", "49%"]}>
                 <Box flex flexDirection="column">
                     <img src={info.image}></img>
                     {Object.keys(info).map((key, idx) => (
@@ -40,7 +40,7 @@ const Form = (props: FormProps): JSX.Element => {
                         </Box>
                     ))}
                 </Box>
-            </StyledForm> */}
+            </StyledForm>
             {/* <StyledForm
                 data-test="component-form"
                 width={["100%", null, "49%", "50%"]}
