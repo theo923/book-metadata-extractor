@@ -1,18 +1,18 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-const { amazonRequest } = require("../../scripts/amazon");
+const { amazonRequest } = require("../../scripts/amazon/index");
+const {
+    amazonDescriptionRequest,
+} = require("../../scripts/amazon/description");
 
 export default async function amazonAPI(req, res) {
-    const { url } = req.body;
+    const { url, method } = req.body;
     // let attempt = 0;
     try {
         let request;
         console.log("Request");
-        // while (attempt <= 5 && Object.keys(request).length === 0) {
-        // request = await amazonRequest(url);
-        //     console.log("EndRequest");
-        //     attempt++;
-        // }
-        request = await amazonRequest(url);
+        if (method === "normal") request = await amazonRequest(url);
+        if (method === "description")
+            request = await amazonDescriptionRequest(url);
         console.log("Finished");
         res.status(200).json(request);
     } catch (e) {
