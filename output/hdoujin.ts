@@ -7,7 +7,7 @@ Alternative CIRCLE:
 SCANLATOR: 
 TRANSLATOR: 
 PUBLISHER: ${info.publisher || ""}
-DESCRIPTION: asin:${info.asin || ""} summary:${description || ""}
+DESCRIPTION: ${info.asin || info.isbn || ""} summary:${description || ""}
 STATUS: 
 CHAPTERS: 
 PAGES: ${info.print_length || ""}

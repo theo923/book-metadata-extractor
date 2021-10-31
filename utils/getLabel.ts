@@ -1,6 +1,10 @@
 export const getLabel = (label, toOriginal) => {
     if (toOriginal) {
         switch (label) {
+            case "isbn10":
+                return "ISBN-10‏";
+            case "isbn13":
+                return "ISBN-13";
             case "asin":
                 return "ASIN";
             case "language":
@@ -37,6 +41,10 @@ export const getLabel = (label, toOriginal) => {
         }
     } else {
         switch (label) {
+            case "ISBN-10‏":
+                return "isbn10";
+            case "ISBN-13":
+                return "isbn13";
             case "ASIN":
                 return "asin";
             case "Language":

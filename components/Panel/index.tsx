@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-    booksProps,
-    childNode,
-    nextFailedRequest,
-} from "../../interface/interface";
+import { booksProps, mangaProps, childNode } from "../../interface/interface";
 import styled, { StyledComponent } from "styled-components";
 import tw from "twin.macro";
 import { flex } from "../../styled";
@@ -29,7 +25,10 @@ const StyledPanel: StyledComponent<"div", any, {}, never> = styled.div`
 const Panel = (props: childNode): JSX.Element => {
     const [url, setUrl] = useState<string>("");
     const [locale, setLocale] = useState<string>("");
-    const [result, setResult] = useState<booksProps | boolean>(false);
+    const [type, setType] = useState<"ebook" | "manga">();
+    const [result, setResult] = useState<booksProps | mangaProps | boolean>(
+        false
+    );
     const [loading, setLoading] = useState<boolean>(false);
     const [loaded, setLoaded] = useState<boolean>();
     const [error, setError] = useState<string>("");
@@ -51,6 +50,8 @@ const Panel = (props: childNode): JSX.Element => {
 
     const handleExtract = async (): Promise<any> => {
         setLoading(true);
+        if (url.includes("ebook")) setType("ebook");
+        else setType("manga");
         if (url.includes(".jp")) setLocale("jp");
         else setLocale("en");
         if (url.includes("amazon")) {
@@ -58,8 +59,9 @@ const Panel = (props: childNode): JSX.Element => {
                 .post("/api/amazon", {
                     url,
                     method: "normal",
+                    type: url.includes("ebook") ? "ebook" : "manga",
                 })
-                .then((data: AxiosResponse<booksProps>) => {
+                .then((data: AxiosResponse<booksProps | mangaProps>) => {
                     if (data.status === 200) {
                         setError("");
                         setResult(data.data);
@@ -130,7 +132,12 @@ const Panel = (props: childNode): JSX.Element => {
                 )}
             </Box>
             {result !== false && (
-                <Form result={ordered(result)} locale={locale} url={url} />
+                <Form
+                    result={ordered(result)}
+                    type={type}
+                    locale={locale}
+                    url={url}
+                />
             )}
         </>
     );

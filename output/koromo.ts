@@ -13,7 +13,7 @@ export const Koromo = (info) => {
   "Types": null,
   "Pages": ${info.print_length || "null"},
   "Tags": [
-    "asin:${info.asin || ""}",
+    "${info.asin || info.isbn || ""}",
     "${info.stars || ""}star",
     "${info.language || ""}"
   ]
