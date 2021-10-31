@@ -5,11 +5,14 @@ export default async function amazonAPI(req, res) {
     const { url } = req.body;
     try {
         let request;
+        let attempt = 0;
         do {
             console.log("Request");
             request = await amazonRequest(url);
-        } while (Object.keys(request).length === 0);
-        console.log("EndRequest");
+            console.log("EndRequest");
+            attempt++;
+        } while (attempt <= 5 && Object.keys(request).length === 0);
+        console.log("Finished");
         res.status(200).json(request);
     } catch (e) {
         res.status(201).json(e);

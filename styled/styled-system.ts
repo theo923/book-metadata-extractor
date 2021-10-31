@@ -9,6 +9,7 @@ import {
     space,
     border,
     display,
+    grid,
 } from "styled-system";
 
 export const normal = compose(space, layout, display);
@@ -20,5 +21,6 @@ export const any = compose(
     background,
     border,
     shadow,
-    normal
+    normal,
+    grid
 );

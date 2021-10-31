@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { childNode } from "../../interface/interface";
+import { booksProps, childNode } from "../../interface/interface";
 import styled, { StyledComponent } from "styled-components";
 import tw from "twin.macro";
 import { flex } from "../../styled";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import Box from "../../styled/Box";
 import Input from "../../styled/Input";
 import Text from "../../styled/Text";
@@ -17,23 +17,21 @@ const StyledPanel: StyledComponent<"div", any, {}, never> = styled.div`
 
 const Panel = (props: childNode): JSX.Element => {
     const [url, setUrl] = useState<string>("");
+    const [locale, setLocale] = useState<string>("");
     const [result, setResult] = useState({});
 
     const handleExtract = async (): Promise<any> => {
+        if (url.includes(".jp")) setLocale("jp");
+        else setLocale("en");
         if (url.includes("amazon")) {
-            let status;
-            do {
-                await axios
-                    .post("/api/amazon", {
-                        url,
-                    })
-                    .then((data) => {
-                        status = data.status;
-                        console.log(status);
-                        if (Object.keys(data.data).length !== 0)
-                            setResult(data.data);
-                    });
-            } while (status != 200);
+            await axios
+                .post("/api/amazon", {
+                    url,
+                })
+                .then((data: AxiosResponse<booksProps>) => {
+                    if (Object.keys(data.data).length !== 0)
+                        setResult(data.data);
+                });
         }
     };
 
@@ -52,7 +50,9 @@ const Panel = (props: childNode): JSX.Element => {
                 </Box>
             </StyledPanel>
             {/* {<Form result={result} />} */}
-            {Object.keys(result).length !== 0 && <Form result={result} />}
+            {Object.keys(result).length !== 0 && (
+                <Form result={result} locale={locale} />
+            )}
         </>
     );
 };
