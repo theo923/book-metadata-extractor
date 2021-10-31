@@ -5,12 +5,11 @@ const {
 } = require("../../scripts/amazon/description");
 
 export default async function amazonAPI(req, res) {
-    const { url, method } = req.body;
-    // let attempt = 0;
+    const { url, method, type } = req.body;
     try {
         let request;
         console.log("Request");
-        if (method === "normal") request = await amazonRequest(url);
+        if (method === "normal") request = await amazonRequest(url, type);
         if (method === "description")
             request = await amazonDescriptionRequest(url);
         console.log("Finished");

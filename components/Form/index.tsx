@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled, { StyledComponent } from "styled-components";
 import tw from "twin.macro";
 import Box from "../../styled/Box";
@@ -19,6 +19,7 @@ interface FormProps {
     result?: booksProps;
     locale?: string;
     url?: string;
+    type?: "ebook" | "manga";
 }
 
 const StyledForm: StyledComponent<"div", any, { width }, never> = styled.div`
@@ -157,9 +158,7 @@ const Form = (props: FormProps): JSX.Element => {
                         <FiDownload size="25px" />
                     </Button>
                 </Box>
-                <Text fontSize={["20px", null, null, "35px"]}>
-                    Preview
-                </Text>
+                <Text fontSize={["20px", null, null, "35px"]}>Preview</Text>
                 <Text fontSize={["10px", null, null, "15px"]}>
                     {textFormat}
                 </Text>

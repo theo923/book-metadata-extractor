@@ -2,65 +2,42 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-export const amazonRequest = async (url) => {
+export const amazonRequest = async (url, type) => {
     try {
         let book_info = {};
         const response = await axios.get(url);
         const html = response.data;
         const $ = cheerio.load(html);
-        let image = $("div#ebooksImageBlockContainer")
-            .find("img#ebooksImgBlkFront")
+        let image = $(pointer(type, "image0"))
+            .find(pointer(type, "image1"))
             .attr("src");
         if (image.includes("._") && image.includes("_.")) {
             const frontpart = image.split("._")[0];
             const endpart = image.split("_.")[1];
             image = frontpart + "." + endpart;
         }
-        const title = $("div#titleblock_feature_div.celwidget")
+        const title = $(pointer(type, "title"))
             .find("span")
             .text()
             .replace(/(\r\n|\n|\r)/gm, "");
         let authors = [];
-        $("span.author.notFaded").each((idx, el) => {
-            const author = $(el).find("a.a-link-normal").text();
+        $(pointer(type, "authors1")).each((idx, el) => {
+            const author = $(el).find(pointer(type, "authors2")).text();
             authors.push(author);
         });
-        const stars = $("i.a-icon.a-icon-star")
+        const stars = $(pointer(type, "stars"))
             .attr("class")
             .split(" ")[2]
             .split("-")[2];
-        // $("li.a-carousel-card.rpi-carousel-attribute-card").each((idx, el) => {
-        //     const carousel_label = $(el)
-        //         .find(
-        //             "div.a-section.a-spacing-small.a-text-center.rpi-attribute-label>span"
-        //         )
-        //         .text();
-        //     const carousel_value = $(el)
-        //         .find("a.a-popover-trigger.a-declarative>span")
-        //         .text();
-        //     if (carousel_value !== "") {
-        //         book_info[carousel_label] = carousel_value;
-        //     }
-        //     else {
-        //         const carousel_value2 = $(el)
-        //             .find(
-        //                 "div.a-section.a-spacing-none.a-text-center.rpi-attribute-value>span"
-        //             )
-        //             .text();
-        //         book_info[carousel_label] = carousel_value2;
-        //     }
-        // });
-        $(
-            "ul.a-unordered-list.a-nostyle.a-vertical.a-spacing-none.detail-bullet-list>li"
-        ).each((idx, el) => {
-            const carousel_item = $(el).find("span.a-list-item");
+        $(pointer(type, "carousel1")).each((idx, el) => {
+            const carousel_item = $(el).find(pointer(type, "carousel2"));
             const carousel_label = carousel_item
-                .find("span>span")
+                .find(pointer(type, "carousel3"))
                 .text()
                 .replace(/(\r\n|\n|\r)/gm, "")
                 .split(":")[0];
             const carousel_value = carousel_item
-                .find("span>span")
+                .find(pointer(type, "carousel3"))
                 .text()
                 .replace(/(\r\n|\n|\r)/gm, "")
                 .split(":")[1];
@@ -70,12 +47,6 @@ export const amazonRequest = async (url) => {
         book_info["stars"] = stars;
         book_info["authors"] = authors;
         book_info["title"] = title;
-        // let description;
-        // let attempt = 0;
-        // while (description == null || !description || attempt >= 3) {
-        //     description = await getDescription(url);
-        //     attempt++;
-        // }
         book_info["description"] = "";
 
         return book_info;
@@ -84,43 +55,39 @@ export const amazonRequest = async (url) => {
     }
 };
 
-const getDescription = async (url) => {
-    let chrome = {};
-    let puppeteer;
-    if (process.env.NODE_ENV === "production") {
-        // running on the Vercel platform.
-        chrome = require("chrome-aws-lambda");
-        puppeteer = require("puppeteer-core");
-    } else {
-        // running locally.
-        puppeteer = require("puppeteer");
-    }
-
-    try {
-        let browser = await puppeteer.launch({
-            args: chrome.args,
-            executablePath: await chrome.executablePath,
-            headless: chrome.headless,
-        });
-        const page = await browser.newPage();
-        await page.goto(url);
-        const iframeParagraph = await page.evaluate(() => {
-            const iframe = document.getElementById("bookDesc_iframe");
-            const iframeDoc =
-                iframe.contentDocument || iframe.contentWindow.document;
-            const iframeP = iframeDoc.getElementById("iframeContent");
-            return iframeP.innerHTML;
-        });
-        await browser.close();
-        return iframeParagraph;
-    } catch (err) {
-        console.error(err);
-        return null;
+const pointer = (type, id) => {
+    switch (id) {
+        case "image0":
+            return type === "ebook"
+                ? "div#ebooksImageBlockContainer"
+                : "div#imageBlockContainer";
+        case "image1":
+            return type === "ebook"
+                ? "img#ebooksImgBlkFront"
+                : "img#imgBlkFront";
+        case "title":
+            return "div#titleblock_feature_div.celwidget";
+        case "authors1":
+            return "span.author.notFaded";
+        case "authors2":
+            return "a.a-link-normal";
+        case "stars":
+            return "i.a-icon.a-icon-star";
+        case "carousel1":
+            return "ul.a-unordered-list.a-nostyle.a-vertical.a-spacing-none.detail-bullet-list>li";
+        case "carousel2":
+            return "span.a-list-item";
+        case "carousel3":
+            return "span>span";
     }
 };
 
 const getFormattedLabel = (label) => {
     switch (label) {
+        case "ISBN-10‏":
+            return "isbn10";
+        case "ISBN-13":
+            return "isbn13";
         case "ASIN‏":
             return "asin";
         case "Language":

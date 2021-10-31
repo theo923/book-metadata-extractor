@@ -24,6 +24,21 @@ export interface booksProps {
     customer_reviews?: string | null | undefined;
 }
 
+export interface mangaProps {
+    isbn10?: string | null | undefined;
+    isbn13?: string | null | undefined;
+    title?: string | null | undefined;
+    image?: string | null | undefined;
+    authors?: string[] | null | undefined;
+    description?: string | null | undefined;
+    stars?: string | null | undefined;
+    language?: string | null | undefined;
+    publisher?: string | null | undefined;
+    publication_date?: string | null | undefined;
+    best_sellers_rank?: string | null | undefined;
+    customer_reviews?: string | null | undefined;
+}
+
 export interface nextFailedRequest {
     message: string;
     name: string;
