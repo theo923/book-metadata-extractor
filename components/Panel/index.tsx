@@ -26,7 +26,7 @@ const StyledPanel: StyledComponent<"div", any, {}, never> = styled.div`
 const Panel = (props: childNode): JSX.Element => {
     const [url, setUrl] = useState<string>("");
     const [locale, setLocale] = useState<string>("");
-    const [result, setResult] = useState<booksProps | boolean | any>(false);
+    const [result, setResult] = useState<any>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [loaded, setLoaded] = useState<boolean>();
     const [error, setError] = useState<string>("");
