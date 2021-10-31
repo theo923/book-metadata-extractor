@@ -44,6 +44,7 @@ const Panel = (props: childNode): JSX.Element => {
         let timer;
         if (!result && loading)
             timer = setTimeout(() => setTime(time + 1), 1000);
+        else setTime(0);
         return () => {
             clearTimeout(timer);
         };
