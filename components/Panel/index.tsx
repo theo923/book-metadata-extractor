@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { booksProps, childNode } from "../../interface/interface";
 import styled, { StyledComponent } from "styled-components";
 import tw from "twin.macro";
@@ -23,6 +23,10 @@ const Panel = (props: childNode): JSX.Element => {
     const [result, setResult] = useState({});
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
+
+    useEffect(() => {
+        console.log("Error ", error);
+    }, [error]);
 
     const handleExtract = async (): Promise<any> => {
         setLoading(true);
@@ -59,7 +63,7 @@ const Panel = (props: childNode): JSX.Element => {
                         <Button onClick={() => handleExtract()}>Submit</Button>
                     )}
                     {((Object.keys(result).length !== 0 && !loading) ||
-                        error) && (
+                        error.length > 0) && (
                         <Button
                             onClick={() => {
                                 setResult({});
@@ -70,7 +74,9 @@ const Panel = (props: childNode): JSX.Element => {
                         </Button>
                     )}
                 </Box>
-                {error && <Text>{error}</Text>}
+                {error.length > 0 && (
+                    <Text fontSize={["20px", null, null, "30px"]}>{error}</Text>
+                )}
             </StyledPanel>
             {Object.keys(result).length !== 0 && (
                 <Form result={result} locale={locale} />
