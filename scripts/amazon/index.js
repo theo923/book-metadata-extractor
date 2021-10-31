@@ -3,8 +3,8 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 
 export const amazonRequest = async (url) => {
-    let book_info = {};
     try {
+        let book_info = {};
         const response = await axios.get(url);
         const html = response.data;
         const $ = cheerio.load(html);
@@ -71,9 +71,11 @@ export const amazonRequest = async (url) => {
         book_info["authors"] = authors;
         book_info["title"] = title;
         let description;
-        do {
+        let attempt = 0;
+        while (description == null || !description || attempt >= 3) {
             description = await getDescription(url);
-        } while (description == null || !description);
+            attempt++;
+        }
         book_info["description"] = description;
 
         return book_info;
@@ -85,7 +87,6 @@ export const amazonRequest = async (url) => {
 const getDescription = async (url) => {
     let chrome = {};
     let puppeteer;
-
     if (process.env.NODE_ENV === "production") {
         // running on the Vercel platform.
         chrome = require("chrome-aws-lambda");

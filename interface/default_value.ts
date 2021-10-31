@@ -1,0 +1,18 @@
+export const books = {
+    asin: "",
+    title: "",
+    image: "",
+    authors: [""],
+    description: "",
+    stars: "",
+    language: "",
+    file_size: "",
+    publisher: "",
+    publication_date: "",
+    text_to_speech: "",
+    x_ray: "",
+    word_wise: "",
+    print_length: "",
+    best_sellers_rank: "",
+    customer_reviews: "",
+};

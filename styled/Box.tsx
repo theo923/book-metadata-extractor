@@ -1,6 +1,5 @@
 import styled, { StyledComponent } from "styled-components";
 import tw from "twin.macro";
-import { childNode } from "../interface/interface";
 import { flex, grid } from "./index";
 import { any } from "./styled-system";
 
