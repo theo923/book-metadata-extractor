@@ -54,10 +54,10 @@ const Panel = (props: childNode): JSX.Element => {
                 .post("/api/amazon", {
                     url,
                 })
-                .then((data: AxiosResponse<booksProps | nextFailedRequest>) => {
+                .then((data: AxiosResponse<any>) => {
                     if (data.status === 200) {
                         setError("");
-                        setResult(data.data || false);
+                        setResult(data.data);
                     }
                 });
             setLoading(false);

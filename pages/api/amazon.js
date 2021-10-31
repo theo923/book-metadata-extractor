@@ -14,7 +14,7 @@ export default async function amazonAPI(req, res) {
         // }
         request = await amazonRequest(url);
         console.log("Finished");
-        res.status(200).json();
+        res.status(200).json(request);
     } catch (e) {
         console.log(e);
         res.status(201).json(e);
