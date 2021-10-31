@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { booksProps, childNode } from "../../interface/interface";
+import { booksProps, childNode, nextFailedRequest } from "../../interface/interface";
 import styled, { StyledComponent } from "styled-components";
 import tw from "twin.macro";
 import { flex } from "../../styled";
@@ -26,7 +26,7 @@ const StyledPanel: StyledComponent<"div", any, {}, never> = styled.div`
 const Panel = (props: childNode): JSX.Element => {
     const [url, setUrl] = useState<string>("");
     const [locale, setLocale] = useState<string>("");
-    const [result, setResult] = useState<booksProps | boolean>(false);
+    const [result, setResult] = useState<booksProps | boolean | any>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [loaded, setLoaded] = useState<boolean>();
     const [error, setError] = useState<string>("");
@@ -54,10 +54,10 @@ const Panel = (props: childNode): JSX.Element => {
                 .post("/api/amazon", {
                     url,
                 })
-                .then((data: AxiosResponse<booksProps>) => {
+                .then((data: AxiosResponse<booksProps | nextFailedRequest>) => {
                     if (data.status === 200) {
                         setError("");
-                        setResult(data.data);
+                        setResult(data.data || false);
                     }
                 });
             setLoading(false);

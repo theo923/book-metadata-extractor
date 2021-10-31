@@ -23,3 +23,11 @@ export interface booksProps {
     best_sellers_rank: string | null | undefined;
     customer_reviews: string | null | undefined;
 }
+
+export interface nextFailedRequest {
+    message: string;
+    name: string;
+    stack: string;
+    status: number;
+}
+}
