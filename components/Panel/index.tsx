@@ -35,6 +35,7 @@ const Panel = (props: childNode): JSX.Element => {
                 .then((data: AxiosResponse<booksProps>) => {
                     if (data.status === 200) setResult(data.data);
                 });
+            setLoading(false);
         }
     };
 

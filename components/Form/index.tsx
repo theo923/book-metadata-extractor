@@ -34,7 +34,7 @@ const Form = (props: FormProps): JSX.Element => {
                     {Object.keys(info).map((key, idx) => (
                         <Box flex flexWrap="wrap" key={idx}>
                             <Text fontSize={["15px", null, null, "20px"]}>
-                                {`${key} :`}
+                                {`${getLabel(key, props.locale)} :`}
                             </Text>
                             <Text fontSize={["15px", null, null, "20px"]}>
                                 {`${info[key]} `}
@@ -50,7 +50,7 @@ const Form = (props: FormProps): JSX.Element => {
                 {Object.keys(info).map((key, idx) => (
                     <Box grid gridTemplateColumns="1fr 1fr" key={idx}>
                         <Text fontSize={["20px", null, null, "30px"]}>
-                            {`${getLabel(key, props.locale)} :`}
+                            {`${key} :`}
                         </Text>
                         <Input
                             name={key}
