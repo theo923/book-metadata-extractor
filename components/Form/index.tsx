@@ -48,8 +48,7 @@ const Form = (props: FormProps): JSX.Element => {
                     ))}
                 </Box>
             </StyledForm>
-            {/* <StyledForm
-                data-test="component-form"
+            <StyledForm
                 width={["100%", null, "49%", "50%"]}
             >
                 {Object.keys(info).map((key, idx) => (
@@ -66,7 +65,7 @@ const Form = (props: FormProps): JSX.Element => {
                         />
                     </Box>
                 ))}
-            </StyledForm> */}
+            </StyledForm>
         </Box>
     );
 };
