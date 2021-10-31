@@ -6,7 +6,6 @@ export const amazonRequest = async (url) => {
     let book_info = {};
     try {
         const response = await axios.get(url);
-        // https://www.amazon.co.jp/%E6%97%A5%E6%9C%AC%E3%81%B8%E3%82%88%E3%81%86%E3%81%93%E3%81%9D%E3%82%A8%E3%83%AB%E3%83%95%E3%81%95%E3%82%93%E3%80%82-1%E3%80%90%E9%9B%BB%E5%AD%90%E7%89%88%E9%99%90%E5%AE%9A%E7%89%B9%E5%85%B8%E4%BB%98%E3%81%8D%E3%80%91-HJ%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF%E3%82%B9-%E3%81%BE%E3%81%8D%E3%81%97%E3%81%BE%E9%88%B4%E6%9C%A8-ebook/dp/B07S73F63G/ref=sr_1_2?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&dchild=1&keywords=%E6%97%A5%E6%9C%AC%E3%81%B8%E3%82%88%E3%81%86%E3%81%93%E3%81%9D%E3%82%A8%E3%83%AB%E3%83%95%E3%81%95%E3%82%93&qid=1635589202&s=digital-text&sr=1-2
         const html = response.data;
         const $ = cheerio.load(html);
         let image = $("div#ebooksImageBlockContainer")
@@ -65,14 +64,15 @@ export const amazonRequest = async (url) => {
                 .text()
                 .replace(/(\r\n|\n|\r)/gm, "")
                 .split(":")[1];
-            book_info[carousel_label] = carousel_value;
+            book_info[getFormattedLabel(carousel_label)] = carousel_value;
         });
         book_info["image"] = image;
         book_info["stars"] = stars;
         book_info["authors"] = authors;
         book_info["title"] = title;
-        book_info["description"] = await getDescription(url);
-        console.log(book_info);
+        do {
+            book_info["description"] = await getDescription(url);
+        } while (book_info["description"] == null);
 
         return book_info;
     } catch (e) {
@@ -83,7 +83,7 @@ export const amazonRequest = async (url) => {
 const getDescription = async (url) => {
     let chrome = {};
     let puppeteer;
-    console.log(process.env.AWS_LAMBDA_FUNCTION_VERSION);
+
     if (process.env.NODE_ENV === "production") {
         // running on the Vercel platform.
         chrome = require("chrome-aws-lambda");
@@ -95,19 +95,11 @@ const getDescription = async (url) => {
 
     try {
         let browser = await puppeteer.launch({
-            args: [
-                ...chrome.args,
-                "--hide-scrollbars",
-                "--disable-web-security",
-            ],
             args: chrome.args,
             executablePath: await chrome.executablePath,
             headless: chrome.headless,
         });
         const page = await browser.newPage();
-        page.setUserAgent(
-            "Opera/9.80 (J2ME/MIDP; Opera Mini/5.1.21214/28.2725; U; ru) Presto/2.8.119 Version/11.10"
-        );
         await page.goto(url);
         const iframeParagraph = await page.evaluate(() => {
             const iframe = document.getElementById("bookDesc_iframe");
@@ -121,5 +113,42 @@ const getDescription = async (url) => {
     } catch (err) {
         console.error(err);
         return null;
+    }
+};
+
+const getFormattedLabel = (label) => {
+    switch (label) {
+        case "ASIN‏":
+            return "asin";
+        case "Language":
+        case "言語‏":
+            return "language";
+        case "File size":
+        case "ファイルサイズ‏":
+            return "file_size";
+        case "Publisher":
+        case "出版社‏":
+            return "publisher";
+        case "Publication date":
+        case "発売日‏":
+            return "publication_date";
+        case "Text-to-Speech":
+        case "Text-to-Speech（テキスト読み上げ機能）‏":
+            return "text_to_speech";
+        case "X-Ray‏":
+            return "x_ray";
+        case "Word Wise‏":
+            return "word_wise";
+        case "Print length":
+        case "本の長さ‏":
+            return "print_length";
+        case "Best Sellers Rank":
+        case "Amazon 売れ筋ランキング":
+            return "best_sellers_rank";
+        case "Customer reviews":
+        case "カスタマーレビュー":
+            return "customer_reviews";
+        default:
+            return label;
     }
 };

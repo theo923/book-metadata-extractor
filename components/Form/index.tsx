@@ -9,34 +9,16 @@ import Text from "../../styled/Text";
 import Button from "../../styled/Button";
 import { any } from "../../styled/styled-system";
 import { useForm } from "../../utils/useForm";
+import { getLabel } from "../../utils/getLabel";
 
 interface FormProps {
     result?: any;
-}
-
-interface useFormProps {
-    "ASIN‏": string;
-    "出版社‏": string;
-    "発売日‏": string;
-    "言語‏": string;
-    "ファイルサイズ‏": string;
-    "Text-to-Speech（テキスト読み上げ機能）‏": string;
-    "X-Ray‏": string;
-    "Word Wise‏": string;
-    "本の長さ‏": string;
-    "Amazon 売れ筋ランキング": string;
-    カスタマーレビュー: string;
-    image: string;
-    stars: string;
-    authors: string[];
-    title: string;
-    description: string;
+    locale?: string;
 }
 
 const StyledForm: StyledComponent<"div", any, { width }, never> = styled.div`
     width: 49%;
-    ${flex}
-    flex-direction: column;
+    justify-content: flex-start;
     ${tw`border-2 rounded-md border-blue-500 p-2`}
     ${any}
 `;
@@ -44,69 +26,41 @@ const StyledForm: StyledComponent<"div", any, { width }, never> = styled.div`
 const Form = (props: FormProps): JSX.Element => {
     const [info, handleChange] = useForm(props.result || {});
 
-    useEffect(() => {
-        // handleChange(props.result);
-        console.log(props.result);
-        console.log(info);
-    }, [props.result]);
-
     return (
-        <Box flex marginTop="8px" flexWrap="wrap">
+        <Box flex alignItems="flex-start" marginTop="8px" flexWrap="wrap">
+            <StyledForm width={["100%", null, "50%", "49%"]}>
+                <Box flex flexDirection="column">
+                    <img src={info.image}></img>
+                    {Object.keys(info).map((key, idx) => (
+                        <Box flex flexWrap="wrap">
+                            <Text fontSize={["15px", null, null, "20px"]}>
+                                {`${key} :`}
+                            </Text>
+                            <Text fontSize={["15px", null, null, "20px"]}>
+                                {`${info[key]} `}
+                            </Text>
+                        </Box>
+                    ))}
+                </Box>
+            </StyledForm>
             <StyledForm
                 data-test="component-form"
                 width={["100%", null, "49%", "50%"]}
             >
-                <Box flex>
-                    <Text fontSize={["20px", null, null, "30px"]}>Props1:</Text>
-                    <Input
-                        width={["50px", "100px", "150px", "200px"]}
-                        type="text"
-                    />
-                </Box>
-                <Box flex>
-                    <Text fontSize={["20px", null, null, "30px"]}>Props2:</Text>
-                    <Input
-                        width={["50px", "100px", "150px", "200px"]}
-                        type="text"
-                    />
-                </Box>
-                <Box flex>
-                    <Text fontSize={["20px", null, null, "30px"]}>Props3:</Text>
-                    <Input
-                        width={["50px", "100px", "150px", "200px"]}
-                        type="text"
-                    />
-                </Box>
-                <Box flex>
-                    <Text fontSize={["20px", null, null, "30px"]}>Props4:</Text>
-                    <Input
-                        width={["50px", "100px", "150px", "200px"]}
-                        type="text"
-                    />
-                </Box>
-                <Box flex>
-                    <Text fontSize={["20px", null, null, "30px"]}>Props5:</Text>
-                    <Input
-                        width={["50px", "100px", "150px", "200px"]}
-                        type="text"
-                    />
-                </Box>
-                <Box flex>
-                    <Text fontSize={["20px", null, null, "30px"]}>Props6:</Text>
-                    <Input
-                        width={["50px", "100px", "150px", "200px"]}
-                        type="text"
-                    />
-                </Box>
-            </StyledForm>
-            <StyledForm width={["100%", null, "50%", "49%"]}>
-                <Box flex flexDirection="column">
-                    <Text fontSize={["20px", null, null, "30px"]}>Props1:</Text>
-                    <Text fontSize={["20px", null, null, "30px"]}>Props2:</Text>
-                    <Text fontSize={["20px", null, null, "30px"]}>Props3:</Text>
-                    <Text fontSize={["20px", null, null, "30px"]}>Props4:</Text>
-                    <Text fontSize={["20px", null, null, "30px"]}>Props5:</Text>
-                </Box>
+                {Object.keys(info).map((key, idx) => (
+                    <Box grid gridTemplateColumns="1fr 1fr" key={idx}>
+                        <Text fontSize={["20px", null, null, "30px"]}>
+                            {`${getLabel(key, props.locale)} :`}
+                        </Text>
+                        <Input
+                            name={key}
+                            width={["150px", "150px", "150px", "200px"]}
+                            type="text"
+                            value={info[key]}
+                            onChange={handleChange}
+                        />
+                    </Box>
+                ))}
             </StyledForm>
         </Box>
     );
