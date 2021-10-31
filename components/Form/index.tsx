@@ -26,6 +26,10 @@ const StyledForm: StyledComponent<"div", any, { width }, never> = styled.div`
 const Form = (props: FormProps): JSX.Element => {
     const [info, handleChange] = useForm(props.result || {});
 
+    useEffect(() => {
+        handleChange(props.result);
+    }, [props.result]);
+
     return (
         <Box flex alignItems="flex-start" marginTop="8px" flexWrap="wrap">
             <StyledForm width={["100%", null, "50%", "49%"]}>
