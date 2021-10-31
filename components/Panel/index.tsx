@@ -22,6 +22,7 @@ const Panel = (props: childNode): JSX.Element => {
     const [locale, setLocale] = useState<string>("");
     const [result, setResult] = useState({});
     const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<boolean>(false);
 
     const handleExtract = async (): Promise<any> => {
         setLoading(true);
@@ -33,7 +34,10 @@ const Panel = (props: childNode): JSX.Element => {
                     url,
                 })
                 .then((data: AxiosResponse<booksProps>) => {
-                    if (data.status === 200) setResult(data.data);
+                    if (data.status === 200) {
+                        setError(false);
+                        setResult(data.data);
+                    } else setError(true);
                 });
             setLoading(false);
         }
@@ -50,10 +54,22 @@ const Panel = (props: childNode): JSX.Element => {
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder="Please insert an url from amazon"
                     ></Input>
-                    {!loading && (
+                    {Object.keys(result).length === 0 && !loading && (
                         <Button onClick={() => handleExtract()}>Submit</Button>
                     )}
+                    {((Object.keys(result).length !== 0 && !loading) ||
+                        error) && (
+                        <Button
+                            onClick={() => {
+                                setResult({});
+                                handleExtract();
+                            }}
+                        >
+                            Refresh
+                        </Button>
+                    )}
                 </Box>
+                {error && <Text>{error}</Text>}
             </StyledPanel>
             {Object.keys(result).length !== 0 && (
                 <Form result={result} locale={locale} />
