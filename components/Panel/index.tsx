@@ -20,13 +20,14 @@ const isBook = (x: any): x is booksProps => x !== undefined;
 const Panel = (props: childNode): JSX.Element => {
     const [url, setUrl] = useState<string>("");
     const [locale, setLocale] = useState<string>("");
-    const [result, setResult] = useState({});
+    const [result, setResult] = useState<booksProps | boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
+    const [loaded, setLoaded] = useState<boolean>();
     const [error, setError] = useState<string>("");
 
     useEffect(() => {
-        console.log("Error ", error);
-    }, [error]);
+        if (!result && loaded) setError("error, please try again!");
+    }, [loading]);
 
     const handleExtract = async (): Promise<any> => {
         setLoading(true);
@@ -42,9 +43,10 @@ const Panel = (props: childNode): JSX.Element => {
                     if (data.status === 200) {
                         setError("");
                         setResult(data.data);
-                    } else setError("error, please try again!");
+                    }
                 });
             setLoading(false);
+            setLoaded(true);
         }
     };
 
@@ -59,14 +61,14 @@ const Panel = (props: childNode): JSX.Element => {
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder="Please insert an url from amazon"
                     ></Input>
-                    {Object.keys(result).length === 0 && !loading && (
+                    {!result && !loading && (
                         <Button onClick={() => handleExtract()}>Submit</Button>
                     )}
-                    {((Object.keys(result).length !== 0 && !loading) ||
-                        error.length > 0) && (
+                    {((result && !loading) || error.length > 0) && (
                         <Button
                             onClick={() => {
-                                setResult({});
+                                setLoaded(false);
+                                setResult(false);
                                 handleExtract();
                             }}
                         >
@@ -74,13 +76,11 @@ const Panel = (props: childNode): JSX.Element => {
                         </Button>
                     )}
                 </Box>
-                {error.length > 0 && (
-                    <Text fontSize={["20px", null, null, "30px"]}>{error}</Text>
-                )}
             </StyledPanel>
-            {Object.keys(result).length !== 0 && (
-                <Form result={result} locale={locale} />
+            {error.length > 0 && (
+                <Text fontSize={["20px", null, null, "30px"]}>{error}</Text>
             )}
+            {result && <Form result={result} locale={locale} />}
         </>
     );
 };
