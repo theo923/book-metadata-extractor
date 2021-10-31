@@ -36,14 +36,14 @@ const Panel = (props: childNode): JSX.Element => {
         if (!result && loaded) setError("error, please try again!");
     }, [loading]);
 
-    useEffect(() => {
-        let timer;
-        if (!result && loading)
-            timer = setTimeout(() => setTime(time + 1), 1000);
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [time, loading]);
+    // useEffect(() => {
+    //     let timer;
+    //     if (!result && loading)
+    //         timer = setTimeout(() => setTime(time + 1), 1000);
+    //     return () => {
+    //         clearTimeout(timer);
+    //     };
+    // }, [time, loading]);
 
     const handleExtract = async (): Promise<any> => {
         setLoading(true);
@@ -113,9 +113,9 @@ const Panel = (props: childNode): JSX.Element => {
                 )}
                 {loading && (
                     <>
-                        <Text fontSize={["20px", null, null, "30px"]}>
+                        {/* <Text fontSize={["20px", null, null, "30px"]}>
                             {`Loading...${time}`}
-                        </Text>
+                        </Text> */}
                         <br />
                         <Text fontSize={["10px", null, null, "15px"]}>
                             If loading time exceeds 15 seconds, please refresh

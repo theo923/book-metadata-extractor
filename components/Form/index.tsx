@@ -39,8 +39,7 @@ const Form = (props: FormProps): JSX.Element => {
                                     {info[key]}
                                 </Text>
                             ) : (
-                                // createStar(info[key])
-                                <p />
+                                createStar(info[key])
                             )}
                         </Box>
                     ))}
