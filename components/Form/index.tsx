@@ -57,7 +57,7 @@ const Form = (props: FormProps): JSX.Element => {
         const url2 = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url2;
-        a.download = selector === "Hdou" ? "metadata.txt" : "Info.json";
+        a.download = selector === "Hdou" ? "info.txt" : "Info.json";
         a.click();
         URL.revokeObjectURL(url2);
     };
