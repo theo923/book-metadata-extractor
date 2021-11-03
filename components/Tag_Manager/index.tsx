@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { childNode } from "../../interface/interface";
 import styled, { StyledComponent } from "styled-components";
 import tw from "twin.macro";
 import { flex } from "../../styled";
@@ -7,7 +6,6 @@ import Box from "../../styled/Box";
 import Input from "../../styled/Input";
 import Text from "../../styled/Text";
 import Button from "../../styled/Button";
-import router from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
 import { GrClear } from "react-icons/gr";
 
@@ -52,7 +50,7 @@ const TagManager = (props): JSX.Element => {
                     ></Input>
                     <Button
                         disabled={Boolean(!tag)}
-                        onClick={(e) => handleTags(tag)}
+                        onClick={() => handleTags(tag)}
                     >
                         <AiOutlinePlus size="25px" />
                     </Button>

@@ -133,7 +133,6 @@ const Panel = (props: childNode): JSX.Element => {
                     </>
                 )}
             </Box>
-            {}
             {result !== false && (
                 <>
                     <TagManager tagData={tagData} setTagData={setTagData} />
