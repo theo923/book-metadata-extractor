@@ -1,4 +1,4 @@
-export const Hdoujin = (info, description, url) => {
+export const Hdoujin = (info, structuredData) => {
     return `TITLE: 
 ORIGINAL TITLE: ${info.title || ""}
 AUTHOR: ${info.authors.map((author) => `"${author}"`) || ""}
@@ -7,7 +7,9 @@ Alternative CIRCLE:
 SCANLATOR: 
 TRANSLATOR: 
 PUBLISHER: ${info.publisher || ""}
-DESCRIPTION: ${info.asin || info.isbn || ""} summary:${description || ""}
+DESCRIPTION: ${info.asin || info.isbn || ""} summary:${
+        structuredData?.description || ""
+    }
 STATUS: 
 CHAPTERS: 
 PAGES: ${info.print_length || ""}
@@ -22,6 +24,11 @@ TAGS: ${
         (info.isbn && "isbn:" + info.asin + ",") ||
         ""
     } ${(info.publisher && "publisher:" + info.publisher + ",") || ""}
+    ${
+        structuredData?.tagData
+            ? structuredData.tagData.map((tag) => ` ${tag}`)
+            : null
+    }
 TYPE: 
 LANGUAGE: ${info.language || ""}
 RELEASED: ${info.publication_date || ""}
@@ -29,5 +36,5 @@ READING DIRECTION:
 CHARACTERS: 
 SERIES: 
 PARODY: 
-URL: ${url || ""}`;
+URL: ${structuredData?.url || ""}`;
 };

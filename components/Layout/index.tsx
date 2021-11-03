@@ -12,7 +12,10 @@ const StyledLayout: StyledComponent<"div", any, {}, never> = styled.div`
 
 const Layout = (props: childNode): JSX.Element => {
     return (
-        <StyledLayout data-test="component-layout">
+        <StyledLayout
+            data-test="component-layout"
+            className="overflow-x-hidden"
+        >
             <Box />
             <Box width={["400px", "600px", "800px", "1300px"]}>
                 {props.children}

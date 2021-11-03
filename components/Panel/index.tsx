@@ -16,6 +16,7 @@ import { FiRefreshCw } from "react-icons/fi";
 import { GrClear } from "react-icons/gr";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
+import TagManager from "../Tag_Manager";
 
 const StyledPanel: StyledComponent<"div", any, {}, never> = styled.div`
     ${flex}
@@ -33,6 +34,7 @@ const Panel = (props: childNode): JSX.Element => {
     const [loaded, setLoaded] = useState<boolean>();
     const [error, setError] = useState<string>("");
     const [time, setTime] = useState<number>(0);
+    const [tagData, setTagData] = useState<string[]>([]);
 
     useEffect(() => {
         if (!result && loaded) setError("error, please try again!");
@@ -131,13 +133,18 @@ const Panel = (props: childNode): JSX.Element => {
                     </>
                 )}
             </Box>
+            {}
             {result !== false && (
-                <Form
-                    result={ordered(result)}
-                    type={type}
-                    locale={locale}
-                    url={url}
-                />
+                <>
+                    <TagManager tagData={tagData} setTagData={setTagData} />
+                    <Form
+                        result={ordered(result)}
+                        type={type}
+                        locale={locale}
+                        url={url}
+                        tagData={tagData}
+                    />
+                </>
             )}
         </>
     );
